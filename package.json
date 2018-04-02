@@ -8,15 +8,18 @@
   },
   "dependencies": {
     "cookie-parser": "~1.4.3",
+    "cookie-session": "^2.0.0-beta.3",
     "debug": "~2.6.9",
     "express": "~4.16.0",
+    "express-session": "^1.15.6",
     "http-errors": "~1.6.2",
     "mongoose": "^5.0.12",
     "morgan": "~1.9.0",
     "passport": "^0.4.0",
-    "passport-figma": "^0.0.4",
+    "passport-figma": "file:../passport-figma",
     "passport-oauth2": "^1.4.0",
-    "pug": "2.0.0-beta11"
+    "pug": "2.0.0-beta11",
+    "uniqid": "^4.1.1"
   },
   "devDependencies": {
     "nodemon": "^1.17.3"

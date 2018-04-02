@@ -1,23 +1,27 @@
-var FigmaStrategy = require('passport-figma').Strategy;
-var config = require('./config')[env];
+const env = process.env.NODE_ENV || 'development';
+const passport = require('passport');
+const FigmaStrategy = require('passport-figma').Strategy;
+const config = require('./config')[env];
+const uniqid = require('uniqid');
 
-module.exports = (passport) => {
-    passport.serializeUser((user, done) => {
-        done(null, user);
+passport.serializeUser((user, done) => {
+  done(null, user);
+});
+passport.deserializeUser((user, done) => {
+    done(null, user);
+});
+
+passport.use(
+  new FigmaStrategy({
+    clientID: config.figmaAuth.clientID,
+    clientSecret: config.figmaAuth.clientSecret,
+    callbackURL: config.figmaAuth.callbackURL,
+    state: true
+  }, (accessToken, refreshToken, profile, done) => {
+    done(null, {
+      "id": uniqid(),
+      "accessToken": accessToken,
+      "refreshToken": refreshToken
     });
-    passport.deserializeUser((user, done) => {
-        done(null, user);
-    });
-    passport.use(new FigmaStrategy({
-            clientID: config.figmaAuth.clientID,
-            clientSecret: config.figmaAuth.clientSecret,
-            callbackURL: config.figmaAuth.callbackURL,
-            state: true
-        },
-        (token, refreshToken, profile, done) => {
-            return done(null, {
-                profile: profile,
-                token: token
-            });
-        }));
-};
+  })
+);

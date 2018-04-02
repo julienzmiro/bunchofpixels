@@ -16,6 +16,9 @@ development: {
       clientID: CLIENTID,
       clientSecret: CLIENTSECRET,
       callbackURL: CALLBACKURL
+    },
+    session: {
+      secret: SECRET
     }
 },
 production: {
@@ -35,6 +38,9 @@ production: {
       clientID: CLIENTID,
       clientSecret: CLIENTSECRET,
       callbackURL: CALLBACKURL
+    },
+    session: {
+      secret: SECRET
     }
 }
 };

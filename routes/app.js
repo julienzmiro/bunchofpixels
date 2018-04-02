@@ -6,7 +6,7 @@ var user_controller = require('../controllers/userController');
 var team_controller = require('../controllers/teamController');
 
 router.get('/', function(req, res, next) {
-  res.render('app', { title: 'Bunch of Pixels' });
+  res.render('app', { title: 'Bunch of Pixels', at: req.session.at, rt: req.session.rt});
 });
 
 module.exports = router;
