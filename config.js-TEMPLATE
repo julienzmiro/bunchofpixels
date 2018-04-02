@@ -1,0 +1,41 @@
+var config = {
+development: {
+    url: URL,
+    database: {
+        user:   USERNAME,
+        pwd:    PASSWORD,
+        host:   HOST,
+        port:   PORT,
+        db:     NAME
+    },
+    server: {
+        host: '127.0.0.1',
+        port: PORT
+    },
+    figmaAuth: {
+      clientID: CLIENTID,
+      clientSecret: CLIENTSECRET,
+      callbackURL: CALLBACKURL
+    }
+},
+production: {
+    url: URL,
+    database: {
+        user:   USER,
+        pwd:    PASSWORD,
+        host:   HOST,
+        port:   PORT,
+        db:     NAME
+    },
+    server: {
+        host:   HOST,
+        port:   PORT
+    },
+    figmaAuth: {
+      clientID: CLIENTID,
+      clientSecret: CLIENTSECRET,
+      callbackURL: CALLBACKURL
+    }
+}
+};
+module.exports = config;
