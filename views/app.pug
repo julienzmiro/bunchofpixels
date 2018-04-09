@@ -2,6 +2,6 @@ extends layout
 
 block content
   h1= title
-  p= "Access token: " + at
-  p= "Refresh token: " + rt
-  iframe(height='450' width='800' allowfullscreen src='https://www.figma.com/embed?embed_host=bunchofpixels&url=https://www.figma.com/file/S4SOa0IbXAjCCYV0hLEop80E/bunchofpixels')
+  a(href='/auth/figma') Sign in with Figma
+  br
+  iframe(height='450' width='800' allowfullscreen src=file)

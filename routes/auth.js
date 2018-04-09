@@ -1,20 +1,24 @@
 const router = require('express').Router();
 const passport = require('passport');
 
-// router.get('/', (req, res) => {
-//   res.render('signIn');
-// });
-
 router.get('/sign-out', (req, res) => {
-  res.send('Signing out');
+  req.logout();
+  res.redirect('/');
 });
 
-router.get('/figma', passport.authenticate('figma', {}));
+router.get('/google', passport.authenticate('google', {
+  scope: ['profile']
+}));
 
-router.get('/figma/redirect', passport.authenticate('figma', { failureRedirect: '/sign-in' }), (req, res) => {
-  req.session.at = req.user.accessToken;
-  req.session.rt = req.user.refreshToken;
+router.get('/google/redirect', passport.authenticate('google', { failureRedirect: '/sign-in' }), (req, res) => {
   res.redirect('/app');
 });
+
+router.get('/figma', passport.authorize('figma', {}));
+
+router.get('/figma/redirect', passport.authorize('figma', { failureRedirect: '/app' }), (req, res) => {
+    res.redirect('/app');
+  }
+);
 
 module.exports = router;

@@ -12,13 +12,19 @@ development: {
         host: '127.0.0.1',
         port: PORT
     },
+    googleAuth: {
+      clientID: CLIENTID,
+      clientSecret: CLIENTSECRET',
+      callbackURL: CALLBACKURL
+    },
     figmaAuth: {
       clientID: CLIENTID,
       clientSecret: CLIENTSECRET,
       callbackURL: CALLBACKURL
     },
     session: {
-      secret: SECRET
+      secret: SECRET,
+      cookieSecret: SECRET
     }
 },
 production: {
@@ -34,13 +40,19 @@ production: {
         host:   HOST,
         port:   PORT
     },
+    googleAuth: {
+      clientID: CLIENTID,
+      clientSecret: CLIENTSECRET',
+      callbackURL: CALLBACKURL
+    },
     figmaAuth: {
       clientID: CLIENTID,
       clientSecret: CLIENTSECRET,
       callbackURL: CALLBACKURL
     },
     session: {
-      secret: SECRET
+      secret: SECRET,
+      cookieSecret: SECRET
     }
 }
 };

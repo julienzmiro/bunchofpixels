@@ -3,9 +3,11 @@ const Schema = mongoose.Schema;
 
 const UserSchema = new Schema(
   {
-    accessToken: String,
-    refreshToken: String
+    username: String,
+    googleId: String,
+    FigmaAccess: String
   }
 );
 
-module.exports = mongoose.model('User', UserSchema);
+const User = mongoose.model('user', UserSchema);
+module.exports = User;

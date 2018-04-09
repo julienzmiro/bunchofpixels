@@ -17,8 +17,10 @@
     "morgan": "~1.9.0",
     "passport": "^0.4.0",
     "passport-figma": "file:../passport-figma",
+    "passport-google-oauth20": "^1.0.0",
     "passport-oauth2": "^1.4.0",
-    "pug": "2.0.0-beta11"
+    "pug": "2.0.0-beta11",
+    "request-promise": "^4.2.2"
   },
   "devDependencies": {
     "nodemon": "^1.17.3"
