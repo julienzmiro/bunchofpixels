@@ -1,5 +1,6 @@
 const Team = require('../models/team');
 const UserController = require('./userController');
+const rp = require('request-promise');
 
 validateTeamURL = (urlToValidate) => {
   const regURL = /\b(?:https?:\/\/)?www.?figma.com\/files\/team\/[0-9]+\/.+(\/)?/g;
@@ -12,6 +13,34 @@ decodeTeamURL = (urlToDecode) => {
     urlID: urlToDecode.substring(teamStart, urlToDecode.indexOf('/', teamStart)),
     urlName: urlToDecode.substring(urlToDecode.indexOf('/', teamStart) + 1)
   };
+};
+
+exports.getFiles = (teamFigmaID, accessToken, cb) => {
+  var filesToReturn = [];
+  rp.get('https://api.figma.com/v1/teams/' + teamFigmaID + '/projects', {
+    auth: {
+      bearer: accessToken
+    }
+  }).then(resProjects => {
+    const projects = JSON.parse(resProjects).projects;
+    projects.forEach((project) => {
+      rp.get('https://api.figma.com/v1/projects/' + project.id + '/files', {
+        auth: {
+          bearer: accessToken
+        }
+      }).then(resFiles => {
+        const files = JSON.parse(resFiles).files;
+        files.forEach((file) => {
+          const fileName = file.name.replace(/\s+/g, '-').toLowerCase();
+          filesToReturn.push({
+            fileName: fileName,
+            fileEmbedURL: 'https://www.figma.com/embed?embed_host=bunchofpixels&url=https://www.figma.com/file/' + file.key + '/' + fileName
+          });
+        });
+        cb(filesToReturn);
+      });
+    });
+  });
 };
 
 exports.findByID = (teamIDToFind, cb) => {

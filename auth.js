@@ -24,14 +24,12 @@ passport.use(
   }, (accessToken, refreshToken, profile, done) => {
       User.findOne({googleId: profile.id}).then((existingUser) => {
         if (existingUser) {
-          console.log('existing user is: ' + existingUser);
           done(null, existingUser);
         } else {
           new User({
             username: profile.displayName,
             googleId: profile.id
           }).save().then((newUser) => {
-            console.log('new user created: ' + newUser);
             done(null, newUser);
           });
         }
@@ -47,7 +45,6 @@ passport.use(
     state: true,
     passReqToCallback: true
   }, (req, accessToken, refreshToken, profile, done) => {
-    console.log('Figma cb reached');
     User.findById(req.user.id).then((existingUser) => {
       if (existingUser && !existingUser.FigmaAccess) {
         new FigmaAccess({
@@ -55,10 +52,8 @@ passport.use(
           accessToken: accessToken,
           refreshToken: refreshToken
         }).save().then((newFigmaAccess) => {
-          console.log('new figmaAccess created: ' + newFigmaAccess);
           existingUser.FigmaAccess = newFigmaAccess.id;
           existingUser.save().then((updatedExistingUser) => {
-            console.log("Existing user has been updated: " + updatedExistingUser);
             done(null, updatedExistingUser);
           });
         });
