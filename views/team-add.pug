@@ -1,0 +1,9 @@
+extends layout
+
+block content
+  h1= title
+  form(action='/app/team/add' method='post')
+    label Your team URL:
+    br
+    input(type='text' name='teamurl')
+    button Add

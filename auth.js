@@ -49,7 +49,7 @@ passport.use(
   }, (req, accessToken, refreshToken, profile, done) => {
     console.log('Figma cb reached');
     User.findById(req.user.id).then((existingUser) => {
-      if (existingUser) {
+      if (existingUser && !existingUser.FigmaAccess) {
         new FigmaAccess({
           userID: existingUser.id,
           accessToken: accessToken,
@@ -62,6 +62,8 @@ passport.use(
             done(null, updatedExistingUser);
           });
         });
+      } else {
+        done(null, existingUser);
       }
     });
   })

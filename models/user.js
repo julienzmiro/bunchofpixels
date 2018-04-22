@@ -5,7 +5,9 @@ const UserSchema = new Schema(
   {
     username: String,
     googleId: String,
-    FigmaAccess: String
+    FigmaAccess: String,
+    teams: [String],
+    currentTeam: String
   }
 );
 

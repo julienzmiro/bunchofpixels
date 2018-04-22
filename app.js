@@ -9,6 +9,7 @@ const auth = require('./auth');
 const indexRouter = require('./routes/index');
 const appRouter = require('./routes/app');
 const authRouter = require('./routes/auth');
+const bodyParser = require('body-parser');
 
 const app = express();
 
@@ -29,7 +30,7 @@ app.use(cookieSession({
 }));
 app.use(passport.initialize());
 app.use(passport.session());
-
+app.use(bodyParser.urlencoded({ extended: true }));
 app.use('/', indexRouter);
 app.use('/app', appRouter);
 app.use('/auth', authRouter);

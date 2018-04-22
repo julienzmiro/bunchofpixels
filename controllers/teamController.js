@@ -1,5 +1,78 @@
-var Team = require('../models/team');
+const Team = require('../models/team');
+const UserController = require('./userController');
 
-exports.team_render = function(req, res) {
-    res.send('NOT IMPLEMENTED');
+validateTeamURL = (urlToValidate) => {
+  const regURL = /\b(?:https?:\/\/)?www.?figma.com\/files\/team\/[0-9]+\/.+(\/)?/g;
+  return regURL.test(urlToValidate);
+};
+
+decodeTeamURL = (urlToDecode) => {
+  const teamStart = urlToDecode.search('team/') + 5;
+  return {
+    urlID: urlToDecode.substring(teamStart, urlToDecode.indexOf('/', teamStart)),
+    urlName: urlToDecode.substring(urlToDecode.indexOf('/', teamStart) + 1)
+  };
+};
+
+exports.findByID = (teamIDToFind, cb) => {
+  Team.findById(teamIDToFind).then((teamToReturn) => {
+    if (teamToReturn) {
+      cb(null, teamToReturn);
+    } else {
+      cb("Error can't find team");
+    }
+  });
+};
+
+exports.updateCurrentTeam = (teamToUse, req, res) => {
+  Team.findOne({figmaID: teamToUse}).then((teamFromDB) => {
+    if (teamFromDB) {
+      UserController.updateCurrentTeam(req.user.id, teamFromDB.id, (err) => {
+        if (err) {
+          console.error(err);
+        } else {
+          req.session.team = teamFromDB;
+          res.redirect('/app/' + req.session.team.figmaID);
+        }
+      });
+    }
+  }).catch((err) => {
+    console.error(err);
+  });
+};
+
+exports.addOrJoin = (req, res) => {
+  if (validateTeamURL(req.body.teamurl)) {
+    Team.findOne({url: req.body.teamurl}).then((existingTeam) => {
+      if (existingTeam) {
+        UserController.addTeam(req.user.id, existingTeam.id, (err) => {
+          if (err) {
+            console.error(err);
+          } else {
+            req.session.team = existingTeam;
+            res.redirect('/app/' + existingTeam.figmaID);
+          }
+        });
+      } else {
+        const teamURLDecoded = decodeTeamURL(req.body.teamurl);
+        new Team({
+          name: teamURLDecoded.urlName,
+          figmaID: teamURLDecoded.urlID,
+          url: req.body.teamurl,
+          users: req.user.id
+        }).save().then((newTeam) => {
+          UserController.addTeam(req.user.id, newTeam.id, (err) => {
+            if (err) {
+              res.send('Error: ' + err);
+            } else {
+              req.session.team = newTeam;
+              res.redirect('/app/' + newTeam.figmaID);
+            }
+          });
+        });
+      }
+    });
+  } else {
+    res.send('Invalid URL: ' + req.body.teamurl);
+  }
 };
